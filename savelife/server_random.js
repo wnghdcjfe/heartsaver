@@ -159,8 +159,9 @@ const makeData = () => {
       
       for(let j = 0; j < sensorUserList.length; j++){
         
-        if(sensorUserList[j].id === i){
+        if(sensorUserList[j].id === i){ 
           testingUser[i].id = sensorUserList[j].id;
+          testingUser[i].name = sensorUserList[j].name;
           testingUser[i].age = sensorUserList[j].age; 
           testingUser[i].disease = sensorUserList[j].disease;
           heartAndClass = makeOnePerson(sensorUserList[j].data, sensorUserList[j].maxData);

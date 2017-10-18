@@ -4,20 +4,20 @@ const app = express();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
 const cors = require('cors');
-const favicon = require('serve-favicon')
-//noble는 우분투에서 설치해야 함. 
-//const noble = require('noble');
-
+const favicon = require('serve-favicon');
+const request = require('request');
+const bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
 app.use(cors());
 app.use(express.static(__dirname + '/dist'));
-// app.use(favicon(path.join(__dirname, 'dist', 'favicon.ico')))
-app.use(favicon(path.join(__dirname,'favicon.ico')))
+app.use(favicon(path.join(__dirname, 'favicon.ico')))
 
 
 const diseaseList = require('./diseaseList.js')();
-const testingUser = require('./testingUser.js')(); 
+const testingUser = require('./testingUser.js')();
 
-//나이와 병에 따라 maxData를 설정하여 testingUser이란 json에 등록시킨다. 
+//기본데이타 설정 : 나이와 병에 따라 maxData를 설정하여 testingUser이란 json에 등록시킨다. 
 for (let i = 0; i < testingUser.length; i++) {
 
   for (let j = 0; j < diseaseList.length; j++) {
@@ -29,44 +29,54 @@ for (let i = 0; i < testingUser.length; i++) {
   }
   testingUser[i].maxData = 220 - testingUser[i].age - diseaseIndex;
   testingUser[i].timesList = ['00:00', '01:15', '02:30', '03:45', '05:00', '06:15', '07:30', '08:45', '10:00', '11:15', '12:30', '13:45', '15:00', '16:15', '17:30', '18:45', '20:00', '21:15', '22:30', '23:45'];
-  testingUser[i].heartsList =[120, 120, 140, 160, 180, 200, 180, 120, 160, 180, 200, 220, 200, 220, 220, 180, 230, 160, 140, 120];
-} 
+  testingUser[i].heartsList = [120, 120, 140, 160, 180, 200, 180, 120, 160, 180, 200, 220, 200, 220, 220, 180, 230, 160, 140, 120];
+}
+//센서로부터 받아온 데이타를 바탕으로 그 부분의 maxData와 sensor를 설정하는 모듈 
+//초기 데이타 설정
+//disease는 병명을 나타내는 코드. 0 : 정상, 1: 부정맥, 2: 천식, 4: 전날음주, 8: 흡연, 16: 당뇨병
+let sensorUserList = [{
+  "id": 0,
+  "name": "주홍철",
+  "data": 30,
+  "age": 25,
+  "disease": 1,
+}, {
+  "id": 4,
+  "name": "유명환",
+  "data": 100,
+  "age": 30,
+  "disease": 1
+}];
 
-//유명환씨의 데이타를 설정하는 모듈. 
-const isClassAlert = (sensorValue, maxData)=>{
-  
-  if(sensorValue < 60 || sensorValue > maxData){
+app.post('/getData', (req, res) => {
+  console.log('Post요청이 들어옵니다.')   
+  let stringBody = req.body.toString(); 
+  stringBody.replace("'", "");
+  stringBody = "[" + stringBody + "]"; 
+  const jsonList = JSON.parse(stringBody);
+  console.log(jsonList); 
+  sensorUserList = jsonList;
+  res.sendStatus(200);
+}); 
+
+
+
+const isClassAlert = (sensorValue, maxData) => {
+
+  if (sensorValue < 60 || sensorValue > maxData) {
     return "alert";
-  }else{
-    return "success"; 
+  } else {
+    return "success";
   }
 }
 
-let sensorValue4 = 100; 
+let sensorValue4 = 100;
 let maxData4 = testingUser[4].maxData;
 
-const makeOnePerson = ()=>{
-  sensorValue = 40; 
-  
+const makeOnePerson = (sensorValue, maxData) => {  
   const d = new Date();
-  const hour = ("0" + d.getHours()).slice(-2);
-  const mininute = ("0" + d.getMinutes()).slice(-2);
-  const time = hour + ":" + mininute;
-
-  let heartAndClass = {
-    "value": sensorValue4,
-    "class": "success",
-    "time": time
-  };
-  heartAndClass.class = isClassAlert(sensorValue4,maxData4); 
-  return heartAndClass;
-}
-
-const getSensor = (maxData) => { 
-  const sensorValue = Math.floor(Math.random() * 160) + 60;
-  const d = new Date();
-  const hour = ("0" + d.getHours()).slice(-2);
-  const mininute = ("0" + d.getMinutes()).slice(-2);
+  const hour = ("0" + d.getMinutes()).slice(-2);
+  const mininute = ("0" + d.getSeconds()).slice(-2);
   const time = hour + ":" + mininute;
 
   let heartAndClass = {
@@ -74,22 +84,98 @@ const getSensor = (maxData) => {
     "class": "success",
     "time": time
   };
-  heartAndClass.class = isClassAlert(sensorValue,maxData); 
+  heartAndClass.class = isClassAlert(sensorValue, maxData);
+  return heartAndClass;
+}
+
+const getSensor = (maxData) => {
+  const sensorValue = Math.floor(Math.random() * 160) + 60;
+  const d = new Date();
+  const hour = ("0" + d.getMinutes()).slice(-2);
+  const mininute = ("0" + d.getSeconds()).slice(-2);
+  const time = hour + ":" + mininute;
+
+  let heartAndClass = {
+    "value": sensorValue,
+    "class": "success",
+    "time": time
+  };
+  heartAndClass.class = isClassAlert(sensorValue, maxData);
 
   return heartAndClass;
 }
 
+//disease는 병명을 나타내는 코드. 0 : 정상, 1: 부정맥, 2: 천식, 4: 전날음주, 8: 흡연, 16: 당뇨병
+const makeMaxDataAndDisease = (diseaseIndex, age) => {
+  let resultString = "";
+  let resultDiseaseIndex = 0;
+  console.log(diseaseIndex, age)
+  if (diseaseIndex & 0) {
+    resultString += "정상";
+  }
+
+  if (diseaseIndex & 1) {
+    resultString += "고혈압";
+    resultDiseaseIndex += 10;
+  }
+
+  if (diseaseIndex & 2) {
+    resultString += "천식";
+    resultDiseaseIndex += 20;
+  }
+
+  if (diseaseIndex & 4) {
+    resultString += "전날음주";
+    resultDiseaseIndex += 20;
+  }
+
+  if (diseaseIndex & 8) {
+    resultString += "흡연";
+    resultDiseaseIndex += 30;
+  }
+
+  if (diseaseIndex & 16) {
+    resultString += "당뇨병";
+    resultDiseaseIndex += 15;
+  }
+  console.log(resultString)
+  const resultObj = {
+    "disease": resultString,
+    "maxData": 220 - age - resultDiseaseIndex
+  }
+  return resultObj;
+}
+
 const makeData = () => {
+  let sensorIdList = []; 
+  for (let i = 0; i < sensorUserList.length; i++) {
+    sensorIdList.push(sensorUserList[i].id);
+    const sensorDiseaseMax = makeMaxDataAndDisease(sensorUserList[i].disease,sensorUserList[i].age);
+    sensorUserList[i].disease = sensorDiseaseMax.disease;
+    sensorUserList[i].maxData = sensorDiseaseMax.maxData;
+  }
+  //disease인덱스를 disease와 maxData를 만들어 배출하는 모듈. 
+
 
   let userlist = [];
 
-  for (let i = 0; i < testingUser.length; i++) { 
+  for (let i = 0; i < testingUser.length; i++) {
     let heartAndClass;
-    if(i === 4){
-      heartAndClass = makeOnePerson();
-    }else{
+
+    if (sensorIdList.includes(i)) {
+      
+      for(let j = 0; j < sensorUserList.length; j++){
+        
+        if(sensorUserList[j].id === i){
+          testingUser[i].id = sensorUserList[j].id;
+          testingUser[i].age = sensorUserList[j].age; 
+          testingUser[i].disease = sensorUserList[j].disease;
+          heartAndClass = makeOnePerson(sensorUserList[j].data, sensorUserList[j].maxData);
+        }
+      } 
+    } else {
       heartAndClass = getSensor(testingUser[i].maxData);
-    } 
+    }
 
     testingUser[i].timesList.shift();
     testingUser[i].timesList.push(heartAndClass.time);
@@ -97,11 +183,11 @@ const makeData = () => {
     testingUser[i].heartsList.push(heartAndClass.value);
 
     const testObj = {
-      "id": i + 1,
+      "id": testingUser[i].id,
       "name": testingUser[i].name,
       "heart": heartAndClass.value,
-      "age": testingUser[i].age,
       "class": heartAndClass.class,
+      "age": testingUser[i].age,
       "disease": testingUser[i].disease,
       "chartData": {
         "times": testingUser[i].timesList,

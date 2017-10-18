@@ -1,6 +1,10 @@
 module.exports = ()=>{
-    const diseaseList = [{
-        "name": "부정맥",
+    const diseaseList = [
+      {
+        "name": "정상",
+        "index": 0
+      },{
+        "name": "고혈압",
         "index": 10
       }, {
         "name": "천식",
@@ -14,9 +18,6 @@ module.exports = ()=>{
       }, {
         "name": "당뇨병",
         "index": 15
-      }, {
-        "name": "정상",
-        "index": 0
       }];
     return diseaseList;
 }

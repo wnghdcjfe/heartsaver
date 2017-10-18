@@ -1,11 +1,11 @@
-const express = require('express');
-const path = require('path');
-const app = express();
-const http = require('http').Server(app);
-const io = require('socket.io')(http);
-const cors = require('cors');
-const favicon = require('serve-favicon');
-const request = require('request');
+const express    = require('express');
+const path       = require('path');
+const app        = express();
+const http       = require('http').Server(app);
+const io         = require('socket.io')(http);
+const cors       = require('cors');
+const favicon    = require('serve-favicon');
+const request    = require('request');
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
@@ -52,7 +52,7 @@ app.post('/getData', (req, res) => {
   console.log('Post요청이 들어옵니다.')   
   let stringBody = req.body.toString(); 
   stringBody.replace("'", "");
-  stringBody = "[" + stringBody + "]"; 
+  stringBody     = "[" + stringBody + "]"; 
   const jsonList = JSON.parse(stringBody);
   console.log(jsonList); 
   sensorUserList = jsonList;
@@ -69,9 +69,6 @@ const isClassAlert = (sensorValue, maxData) => {
     return "success";
   }
 }
-
-let sensorValue4 = 100;
-let maxData4 = testingUser[4].maxData;
 
 const makeOnePerson = (sensorValue, maxData) => {  
   const d = new Date();
@@ -105,7 +102,7 @@ const getSensor = (maxData) => {
   return heartAndClass;
 }
 
-//disease는 병명을 나타내는 코드. 0 : 정상, 1: 부정맥, 2: 천식, 4: 전날음주, 8: 흡연, 16: 당뇨병
+//disease는 병명을 나타내는 코드. 0 : 정상, 1: 고혈압, 2: 천식, 4: 전날음주, 8: 흡연, 16: 당뇨병
 const makeMaxDataAndDisease = (diseaseIndex, age) => {
   let resultString = "";
   let resultDiseaseIndex = 0;
@@ -137,8 +134,7 @@ const makeMaxDataAndDisease = (diseaseIndex, age) => {
   if (diseaseIndex & 16) {
     resultString += "당뇨병";
     resultDiseaseIndex += 15;
-  }
-  console.log(resultString)
+  } 
   const resultObj = {
     "disease": resultString,
     "maxData": 220 - age - resultDiseaseIndex
@@ -148,15 +144,13 @@ const makeMaxDataAndDisease = (diseaseIndex, age) => {
 
 const makeData = () => {
   let sensorIdList = []; 
+  
   for (let i = 0; i < sensorUserList.length; i++) {
     sensorIdList.push(sensorUserList[i].id);
     const sensorDiseaseMax = makeMaxDataAndDisease(sensorUserList[i].disease,sensorUserList[i].age);
     sensorUserList[i].disease = sensorDiseaseMax.disease;
     sensorUserList[i].maxData = sensorDiseaseMax.maxData;
-  }
-  //disease인덱스를 disease와 maxData를 만들어 배출하는 모듈. 
-
-
+  } 
   let userlist = [];
 
   for (let i = 0; i < testingUser.length; i++) {

@@ -27,6 +27,7 @@
         </div>
       </div>
     </div> 
+    <audio :src="alertMusic"></audio>
   </div>
 </template>
 
@@ -34,7 +35,7 @@
   import chartComponent from './chartComponent';
 
   import io from '../../lib/socket.io';
-
+  const alertMusic = require('../assets/alert.mp3'); 
   //socket으로 userlist를 받는다. 
   //filter로 순위로 filter를 해서 렌더링을 한다. 
   //socket으로 받은 data를 기반으로 한다.   
@@ -43,7 +44,8 @@
     data() {
       return { 
         userlist: {},
-        socketServer: null
+        socketServer: null,
+        alertMusic:alertMusic
       }
     },
     mounted() {
@@ -51,10 +53,23 @@
     },
     methods: {
       connect() {
-        this.socketServer = io.connect('http://127.0.0.1:52273');
-
+        this.socketServer = io.connect('http://127.0.0.1:52273'); 
+        const audio = document.getElementsByTagName("audio")[0];   
         this.socketServer.on('sendUserlist', (userlist) => {
           this.userlist = userlist;
+          let isPlay = false; 
+          for(let i = 0; i < this.userlist.length; i++){
+            if(this.userlist[i].class === "alert"){
+              isPlay = true; 
+              break;
+            }
+          }
+          if(isPlay){
+            audio.play(); 
+          }else{
+            audio.pause(); 
+          }
+            
         })
       }
     },

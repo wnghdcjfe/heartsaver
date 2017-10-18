@@ -4,18 +4,7 @@
 
 ## Build Setup
 
-``` bash
-# install pre-dependencies
-npm install -g vue-cli
-# start make something
-vue init webpack <something>
-
-# and then copy src to <something> Project
-copy src folder and paste it
-
-# and then copy server & etc.. 
-copy server & etc.. and paste it 
-
+``` bash 
 # install dependencies
 npm install
 
@@ -29,7 +18,8 @@ npm run build
 npm run build --report
 
 # Starting Server! 
-node server_random.js
+> node server_random.js
+> python connectArduinoReqNode.py
 
 ```
 

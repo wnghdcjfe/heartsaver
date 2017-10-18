@@ -105,8 +105,7 @@ const getSensor = (maxData) => {
 //disease는 병명을 나타내는 코드. 0 : 정상, 1: 고혈압, 2: 천식, 4: 전날음주, 8: 흡연, 16: 당뇨병
 const makeMaxDataAndDisease = (diseaseIndex, age) => {
   let resultString = "";
-  let resultDiseaseIndex = 0;
-  console.log(diseaseIndex, age)
+  let resultDiseaseIndex = 0; 
   if (diseaseIndex & 0) {
     resultString += "정상";
   }

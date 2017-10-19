@@ -1,12 +1,16 @@
 # HEARTSAVER
 
 > VUE.JS + NODE.JS + PYTHON + ARDUINO project
+
 > Arduino : RFID, LED, BLUETOOTH, TEMPERATUREHUMIDITY SENSOR, VIBRATION
 
 ##팀, 하트세이버(공군 중위 주홍철, 육군 중위 문선균, 공군 병장 송성빈, 박병윤)의 IOT Project 
 체력검정, 오래달리기를 하다 죽기도 합니다. 이를 방지하기 위한, 
+<br>
 안전한 체력검정을 위한 실시간 모니터링 및 웨어러블 IOT자각인지센서팔지, 하트세이버!!
-개개인의 심박수 임계치를 설정하여 그 임계치를 기반으로 심박수를 모니터하고 자각인지를 하게 합니다! 
+<br>
+개개인의 심박수 임계치를 설정하여 그 임계치를 기반으로 심박수를 모니터하고 자각인지를 하게 합니다!
+<br> 
 (심박수 센서가 없어 온도센서로 모의구현하였습니다.)
 ``` bash 
 1. 처음에 패스를 아두이노에 대면 RFID를 통해 군번을 읽어옵니다. 
@@ -43,4 +47,4 @@ npm run build --report
 ```
 ## Server : http://127.0.0.1:52273
 ![예제화면](./example.png) 
-![하트세이버](./사진및동영상및PPT/사진/heartsaver4.jpg)
+![하트세이버](./heartsaver4.jpg)

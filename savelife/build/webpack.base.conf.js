@@ -1,8 +1,7 @@
-'use strict'
-const path = require('path')
-const utils = require('./utils')
-const config = require('../config')
-const vueLoaderConfig = require('./vue-loader.conf')
+var path = require('path')
+var utils = require('./utils')
+var config = require('../config')
+var vueLoaderConfig = require('./vue-loader.conf')
 
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
@@ -23,7 +22,7 @@ module.exports = {
     extensions: ['.js', '.vue', '.json'],
     alias: {
       'vue$': 'vue/dist/vue.esm.js',
-      '@': resolve('src'),
+      '@': resolve('src')
     }
   },
   module: {
@@ -32,6 +31,11 @@ module.exports = {
         test: /\.vue$/,
         loader: 'vue-loader',
         options: vueLoaderConfig
+      },
+      {
+        test: /\.mp3$/,
+        loader: 'file-loader',
+        include: [resolve('src'), resolve('test')]
       },
       {
         test: /\.js$/,
@@ -44,14 +48,6 @@ module.exports = {
         options: {
           limit: 10000,
           name: utils.assetsPath('img/[name].[hash:7].[ext]')
-        }
-      },
-      {
-        test: /\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/,
-        loader: 'url-loader',
-        options: {
-          limit: 10000,
-          name: utils.assetsPath('media/[name].[hash:7].[ext]')
         }
       },
       {

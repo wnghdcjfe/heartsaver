@@ -48,6 +48,8 @@ let sensorUserList = [{
   "disease": 1
 }];
 
+let count = 1;
+let beforecount = 0;
 app.post('/getData', (req, res) => {
   console.log('Post요청이 들어옵니다.')   
   let stringBody = req.body.toString(); 
@@ -56,6 +58,7 @@ app.post('/getData', (req, res) => {
   const jsonList = JSON.parse(stringBody);
   console.log(jsonList); 
   sensorUserList = jsonList;
+  count = count + 1; 
   res.sendStatus(200);
 }); 
 
@@ -198,10 +201,15 @@ const makeData = () => {
 
 io.on('connection', function (socket) {
   //userlist를 만드는 모듈  
-  setInterval(() => {
+  if(count > beforecount){
     const userlist = makeData();
     socket.emit('sendUserlist', userlist);
-  }, 1000 * 1);
+    
+  }
+  // setInterval(() => {
+  //   const userlist = makeData();
+  //   socket.emit('sendUserlist', userlist);
+  // }, 1000 * 1);
 
 })
 http.listen(52273, () => {

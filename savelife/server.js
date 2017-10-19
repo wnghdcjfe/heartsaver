@@ -5,7 +5,7 @@ const http = require('http').Server(app);
 const io = require('socket.io')(http);
 const cors = require('cors');
 //noble는 우분투에서 설치해야 함. 
-//const noble = require('noble');
+const noble = require('noble');
 
 app.use(cors());
 app.use(express.static(__dirname + '/dist'));
@@ -67,7 +67,10 @@ noble.on('discover', function (peripheral) {
               /* 팔찌로부터 받는 DATA FORMAT
                *{
                *  "id":정수값,
-               *  "data":정수값
+               *  "name":정수값,
+               *  "data":정수값,
+               *  "age":정수값,
+               *  "disease": 정수값 | 정상 : 0, 부정맥: 1, 천식 : 2, 전날음주 : 3, 흡연 : 4, 당뇨병 5
                *}  
                *테스트는 유명환선생님의 데이타로 한다. 
                */ 

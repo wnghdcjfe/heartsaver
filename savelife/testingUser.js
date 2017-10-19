@@ -1,22 +1,22 @@
 module.exports = ()=>{
   const testingUser = [{
     "id":1,
-    "name": "주홍철",
+    "name": "지수",
     "age": 25,
     "disease": "천식"
   }, {
     "id":2,
-    "name": "문선균",
+    "name": "한예슬",
     "age": 25,
     "disease": "정상"
   }, {
     "id":3,
-    "name": "박병윤",
+    "name": "힌효주",
     "age": 22,
     "disease": "정상"
   }, {
     "id":4,
-    "name": "송선빈",
+    "name": "김연아",
     "age": 22,
     "disease": "정상"
   }, {

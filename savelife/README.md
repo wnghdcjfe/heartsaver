@@ -1,7 +1,7 @@
 # HEARTSAVER
 
 > VUE.JS + NODE.JS + PYTHON + ARDUINO project
-
+> Arduino : RFID, LED, BLUETOOTH, TEMPERATUREHUMIDITY SENSOR, VIBRATION  
 ## Build Setup
 
 ``` bash 
@@ -20,6 +20,7 @@ npm run build --report
 # Starting Server! 
 > node server_random.js
 > python connectArduinoReqNode.py
+> Arduino Upload : RFIDBluetoothSensor.ino upload to    Arduino
 
 ```
 

@@ -201,7 +201,7 @@ io.on('connection', function (socket) {
   setInterval(() => {
     const userlist = makeData();
     socket.emit('sendUserlist', userlist);
-  }, 1000 * 5);
+  }, 1000 * 1);
 
 })
 http.listen(52273, () => {

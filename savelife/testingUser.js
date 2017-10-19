@@ -21,9 +21,9 @@ module.exports = ()=>{
     "disease": "정상"
   }, {
     "id":5,
-    "name": "유명환",
+    "name": "아이유",
     "age": 30,
-    "disease": "흡연"
+    "disease": "정상"
   }, {
     "id":6,
     "name": "원빈",

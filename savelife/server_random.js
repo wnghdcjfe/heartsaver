@@ -156,11 +156,11 @@ const makeData = () => {
   for (let i = 0; i < testingUser.length; i++) {
     let heartAndClass;
 
-    if (sensorIdList.includes(i)) {
+    if (sensorIdList.includes(testingUser[i].id)) {
       
       for(let j = 0; j < sensorUserList.length; j++){
         
-        if(sensorUserList[j].id === i){ 
+        if(testingUser[i].id === sensorUserList[j].id){ 
           testingUser[i].id      = sensorUserList[j].id;
           testingUser[i].name    = sensorUserList[j].name;
           testingUser[i].age     = sensorUserList[j].age; 

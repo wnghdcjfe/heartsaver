@@ -71,10 +71,10 @@ const isClassAlert = (sensorValue, maxData) => {
 }
 
 const makeOnePerson = (sensorValue, maxData) => {  
-  const d = new Date();
-  const hour = ("0" + d.getMinutes()).slice(-2);
+  const d        = new Date();
+  const hour     = ("0" + d.getMinutes()).slice(-2);
   const mininute = ("0" + d.getSeconds()).slice(-2);
-  const time = hour + ":" + mininute;
+  const time     = hour + ":" + mininute;
 
   let heartAndClass = {
     "value": sensorValue,
@@ -86,11 +86,12 @@ const makeOnePerson = (sensorValue, maxData) => {
 }
 
 const getSensor = (maxData) => {
-  const sensorValue = Math.floor(Math.random() * 160) + 60;
-  const d = new Date();
-  const hour = ("0" + d.getMinutes()).slice(-2);
-  const mininute = ("0" + d.getSeconds()).slice(-2);
-  const time = hour + ":" + mininute;
+  // const sensorValue = Math.floor(Math.random() * 160) + 60;
+  const sensorValue   = 100;
+  const d             = new Date();
+  const hour          = ("0" + d.getMinutes()).slice(-2);
+  const mininute      = ("0" + d.getSeconds()).slice(-2);
+  const time          = hour + ":" + mininute;
 
   let heartAndClass = {
     "value": sensorValue,
@@ -160,11 +161,11 @@ const makeData = () => {
       for(let j = 0; j < sensorUserList.length; j++){
         
         if(sensorUserList[j].id === i){ 
-          testingUser[i].id = sensorUserList[j].id;
-          testingUser[i].name = sensorUserList[j].name;
-          testingUser[i].age = sensorUserList[j].age; 
+          testingUser[i].id      = sensorUserList[j].id;
+          testingUser[i].name    = sensorUserList[j].name;
+          testingUser[i].age     = sensorUserList[j].age; 
           testingUser[i].disease = sensorUserList[j].disease;
-          heartAndClass = makeOnePerson(sensorUserList[j].data, sensorUserList[j].maxData);
+          heartAndClass          = makeOnePerson(sensorUserList[j].data, sensorUserList[j].maxData);
         }
       } 
     } else {

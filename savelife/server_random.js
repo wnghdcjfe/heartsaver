@@ -107,7 +107,7 @@ const getSensor = (maxData) => {
 const makeMaxDataAndDisease = (diseaseIndex, age) => {
   let resultString = "";
   let resultDiseaseIndex = 0; 
-  if (diseaseIndex & 0) {
+  if (diseaseIndex == 0) {
     resultString += "정상";
   }
 

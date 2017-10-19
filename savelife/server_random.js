@@ -148,8 +148,8 @@ const makeData = () => {
   for (let i = 0; i < sensorUserList.length; i++) {
     sensorIdList.push(sensorUserList[i].id);
     const sensorDiseaseMax = makeMaxDataAndDisease(sensorUserList[i].disease,sensorUserList[i].age);
-    sensorUserList[i].disease = sensorDiseaseMax.disease;
-    sensorUserList[i].maxData = sensorDiseaseMax.maxData;
+    sensorUserList[i].diseaseStr = sensorDiseaseMax.disease;
+    sensorUserList[i].maxDataResult = sensorDiseaseMax.maxData;
   } 
   let userlist = [];
 
@@ -164,8 +164,8 @@ const makeData = () => {
           testingUser[i].id      = sensorUserList[j].id;
           testingUser[i].name    = sensorUserList[j].name;
           testingUser[i].age     = sensorUserList[j].age; 
-          testingUser[i].disease = sensorUserList[j].disease;
-          heartAndClass          = makeOnePerson(sensorUserList[j].data, sensorUserList[j].maxData);
+          testingUser[i].disease = sensorUserList[j].diseaseStr;
+          heartAndClass          = makeOnePerson(sensorUserList[j].data, sensorUserList[j].maxDataResult);
         }
       } 
     } else {

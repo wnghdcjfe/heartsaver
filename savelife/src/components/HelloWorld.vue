@@ -13,20 +13,20 @@
     </nav>
     <div class="userListWrap">
       <div class="userWrap" v-for="(user, index ) in userlist" :key="user.num" :class="user.class">
-        <div class="userInfo"> 
+        <div class="userInfo">
           <span>{{user.id}}번 {{user.name}} ( {{user.age}} ) {{user.disease}}</span>
-        </div> 
-        
+        </div>
+
         <div class="userHeart">
           <span class="num">{{user.heart}}</span>
           <span class="unit">bpm</span>
-        </div> 
+        </div>
 
         <div>
           <chartComponent :chartData="user.chartData"></chartComponent>
         </div>
       </div>
-    </div> 
+    </div>
     <audio :src="alertMusic"></audio>
   </div>
 </template>
@@ -35,17 +35,14 @@
   import chartComponent from './chartComponent';
 
   import io from '../../lib/socket.io';
-  const alertMusic = require('../assets/alert.mp3'); 
-  //socket으로 userlist를 받는다. 
-  //filter로 순위로 filter를 해서 렌더링을 한다. 
-  //socket으로 받은 data를 기반으로 한다.   
+  const alertMusic = require('../assets/alert.mp3');
   export default {
     name: 'HelloWorld',
     data() {
-      return { 
+      return {
         userlist: {},
         socketServer: null,
-        alertMusic:alertMusic
+        alertMusic: alertMusic
       }
     },
     mounted() {
@@ -53,23 +50,39 @@
     },
     methods: {
       connect() {
-        this.socketServer = io.connect('http://127.0.0.1:52273'); 
-        const audio = document.getElementsByTagName("audio")[0];   
+        this.socketServer = io.connect('http://127.0.0.1:52273');
+        const audio = document.getElementsByTagName("audio")[0];
+        //socket으로 userlist를 받는다.한명이라도 위험한 사람이 있다면 오디오가 플레이된다.
+        //userlist 에는 아래에 해당하는 객체가 모여있다. 이 데이타를 통해 실시간값, 차트데이타가 생성된다.
+        // const testObj = {
+        //   "id": testingUser[i].id,
+        //   "name": testingUser[i].name,
+        //   "heart": heartAndClass.value,
+        //   "class": heartAndClass.class,
+        //   "age": testingUser[i].age,
+        //   "disease": testingUser[i].disease,
+        //   "chartData": {
+        //     "times": testingUser[i].timesList,
+        //     "heartData": testingUser[i].heartsList,
+        //     "minData": 60,
+        //     "maxData": testingUser[i].maxData,
+        //   }
+        // };
         this.socketServer.on('sendUserlist', (userlist) => {
           this.userlist = userlist;
-          let isPlay = false; 
-          for(let i = 0; i < this.userlist.length; i++){
-            if(this.userlist[i].class === "alert"){
-              isPlay = true; 
+          let isPlay = false;
+          for (let i = 0; i < this.userlist.length; i++) {
+            if (this.userlist[i].class === "alert") {
+              isPlay = true;
               break;
             }
           }
-          if(isPlay){
-            audio.play(); 
-          }else{
-            audio.pause(); 
+          if (isPlay) {
+            audio.play();
+          } else {
+            audio.pause();
           }
-            
+
         })
       }
     },
@@ -79,40 +92,44 @@
   }
 
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
+ 
 <style>
   .userListWrap {
     display: flex;
     flex-wrap: wrap;
-    justify-content:space-around;
+    justify-content: space-around;
   }
-  .userListWrap > div{
-    margin-bottom:10px;
+
+  .userListWrap>div {
+    margin-bottom: 10px;
   }
-  .userInfo{
+
+  .userInfo {
     background-color: #c9e1df;
     padding: 10px;
-        font-size: 24px;
+    font-size: 24px;
   }
+
   .userHeart {
-      top: 26px; 
+    top: 26px;
     position: relative;
-  } 
-  .userHeart > .num{
+  }
+
+  .userHeart>.num {
     font-size: 50px;
     font-weight: bold;
   }
 
   .userWrap {
     display: inline-block;
-     border: 1px solid #79b4b0;
-     background:#fff;
-  } 
+    border: 1px solid #79b4b0;
+    background: #fff;
+  }
+
   .alert {
     background: #c92325 !important;
     animation: .8s infinite beatHeart;
-  } 
+  }
 
   @keyframes beatHeart {
     0% {
@@ -130,7 +147,7 @@
     100% {
       transform: scale(1);
     }
-  }  
+  }
 
   .icon {
     width: 50px;

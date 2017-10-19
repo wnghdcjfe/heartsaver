@@ -4,11 +4,7 @@
 
 <script>
   import ECharts from 'vue-echarts/components/ECharts.vue'
-  import 'echarts'
-
-  //socket으로 userlist를 받는다. 
-  //filter로 순위로 filter를 해서 렌더링을 한다. 
-  //socket으로 받은 data를 기반으로 한다.     
+  import 'echarts'    
 
   export default {
     name: 'HelloWorld',
@@ -59,8 +55,7 @@
             data: this.chartData.heartData,
             markArea: {
               data: [
-                [{
-                  // name: '평균값',
+                [{ 
                   yAxis:  this.chartData.minData
                 }, {
                   yAxis: this.chartData.maxData
@@ -95,8 +90,7 @@
   }
 
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
+ 
 <style> 
 
   .echarts {
